@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    html {
+      font-size: 150%;
+    }
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+  
+</head>
+<body>
+  <div v-scope="MyApp({count:1})">
+    
+    <p v-cloak>{{ count }}</p>
+    <p>{{plusOne}}</p>
+    <button @click="increment">inc</button>
+  </div>
+
+  <script type="module">
+    import { createApp } from 'https://unpkg.com/petite-vue?module';
+
+    const MyApp = (props) => {
+      return {
+        count: props.count,
+        // get
+        get plusOne() {
+          return this.count + 1
+        },
+        // methods
+        increment() {
+          this.count++
+        }
+      }
+    }
+  
+    createApp({
+      MyApp
+    }).mount()
+  </script>
+</body>
+</html>

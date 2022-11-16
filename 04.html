@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    html {
+      font-size: 150%;
+    }
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+  
+</head>
+<body>
+
+  <script>
+    window.someVar = {
+      products: [
+        { id: 'fakeId1', name:'Product1', price: 100, img: 'https://fakeimg.pl/250x100/?text=1' },
+        { id: 'fakeId2', name:'Product2', price: 200, img: 'https://fakeimg.pl/250x100/?text=2' }
+      ]
+    }
+  </script>
+
+  <my-web-component v-scope="MyApp(window.someVar)">
+    <div v-for="p in products">
+      <p>${p.name}</p>
+      <p v-cloak>${ p.price }</p>
+      <img :src="p.img" alt="" />
+      <button @click="addToCart(p.id)">AddToCard</button>
+    </div>
+    <hr />
+    <h3>${cart}</h3>
+    <h2>${calcPrice}</h2>
+  </my-web-component>
+
+  <script type="module">
+    import { createApp } from 'https://unpkg.com/petite-vue?module';
+
+
+    const MyApp = (props) => {
+      return {
+        products: props.products,
+        cart: [],
+        get calcPrice() {
+          return this.cart.reduce((prev, curr)=> {
+            const findProduct = props.products.find((p)=> p.id === curr);
+            return prev + findProduct.price;
+          }, 0)
+        },
+        addToCart(pId) {
+          this.cart.push(pId);
+        }
+      }
+    }
+
+    class MyWebComponent extends HTMLElement {
+      constructor() {
+        super();
+        createApp({
+          MyApp,
+          $delimiters: ['${', '}'],
+        }).mount(this);
+      }
+    }
+    window.customElements.define('my-web-component', MyWebComponent)
+
+  
+  </script>
+</body>
+</html>

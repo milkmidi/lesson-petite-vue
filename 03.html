@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <style>
+    html {
+      font-size: 150%;
+    }
+    [v-cloak] {
+      display: none;
+    }
+  </style>
+  
+</head>
+<body>
+
+  <script>
+    window.someVar = {
+      count: 1
+    }
+  </script>
+
+  <my-web-component v-scope="MyApp(window.someVar)">
+    <div v-effect="watchCount(count)">
+      <p v-cloak>{{ count }}</p>
+      <p>{{plusOne}}</p>
+      <button @click="increment">inc</button>
+    </div>
+  </my-web-component>
+
+  <script type="module">
+    import { createApp } from 'https://unpkg.com/petite-vue?module';
+
+
+    const MyApp = (props) => {
+      return {
+        count: props.count,
+        get plusOne() {
+          return this.count + 1
+        },
+        watchCount(c){
+          console.log(c);
+        },
+        increment() {
+          this.count++
+        }
+      }
+    }
+    class MyWebComponent extends HTMLElement {
+      constructor() {
+        super();
+        createApp({
+          MyApp
+        }).mount(this);
+      }
+    }
+    window.customElements.define('my-web-component', MyWebComponent)
+
+  
+  </script>
+</body>
+</html>
