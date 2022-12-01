@@ -13,6 +13,14 @@
     [v-cloak] {
       display: none;
     }
+    .box {
+      width: 60px;
+      height: 60px;
+      background-color: red;
+    }
+      .box--green {
+        background-color: green;
+      }
   </style>
   
 </head>
@@ -22,6 +30,9 @@
     <p v-cloak>{{ count }}</p>
     <p>{{plusOne}}</p>
     <button @click="increment">inc</button>
+    <button @click="isShow = !isShow">toggle show</button>
+    <div class="box" v-if="isShow"></div>
+    <div class="box box--green" v-show="isShow"></div>
   </div>
 
   <script type="module">
@@ -29,6 +40,7 @@
 
     const MyApp = (props) => {
       return {
+        isShow: false,
         count: props.count,
         // get
         get plusOne() {
