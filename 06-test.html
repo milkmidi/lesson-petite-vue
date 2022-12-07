@@ -32,19 +32,7 @@
 
   <div id="content"></div>
 
-  <script type="template" id="template">
-    <my-web-component v-scope="MyApp(window.someVar)">
-      <div v-for="p in products" class="card">
-        <p>${p.name}</p>
-        <p v-cloak>${ p.price }</p>
-        <img :src="p.img" alt="" />
-        <button @click="addToCart(p.id)">AddToCard</button>
-      </div>
-      <hr />
-      <h3>${cart}</h3>
-      <h2>${calcPrice}</h2>
-    </my-web-component>
-  </script>
+
 
   <script type="module">
     import { createApp } from 'https://unpkg.com/petite-vue?module';
@@ -77,11 +65,16 @@
     }
     window.customElements.define('my-web-component', MyWebComponent);
 
-    const template = document.getElementById('template');
-    console.log(template.innerText);
-    document.getElementById('content').innerHTML = template.innerText;
+    fetch('/data.txt').then(res=> res.text()).then((res)=> {
+      let html = document.createElement('div');
+      html.innerHTML = res;
 
-  
+      // correct
+      // html = new DOMParser().parseFromString(res, "text/html");
+
+      const s = html.querySelector('.section');
+      document.getElementById('content').innerHTML = s.innerHTML;
+    })
   </script>
 </body>
 </html>
